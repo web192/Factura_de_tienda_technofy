@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura - Tienda_Techonofy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* --- style.css start --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .invoice-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        .invoice-header .logo {
+            max-width: 150px;
+            margin-bottom: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .invoice-header h1 {
+            color: #0056b3;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .company-info, .invoice-meta {
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin-top: 15px;
+        }
+
+        .company-info p, .invoice-meta p {
+            margin: 0;
+        }
+
+        .customer-details, .product-entry, .summary, .qr-section, .invoice-footer {
+            margin-bottom: 25px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        h2 {
+            color: #0056b3;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .input-group input[type="text"],
+        .input-group input[type="email"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        #productTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        #productTable th, #productTable td {
+            border: 1px solid #eee;
+            padding: 10px;
+            text-align: left;
+        }
+
+        #productTable th {
+            background-color: #f8f8f8;
+            font-weight: bold;
+            color: #555;
+        }
+
+        #productTable input[type="text"],
+        #productTable input[type="number"] {
+            width: calc(100% - 10px);
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #productTable .delete-row-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        #productTable .delete-row-btn:hover {
+            background-color: #c0392b;
+        }
+
+        #addProductBtn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 1em;
+        }
+
+        #addProductBtn:hover {
+            background-color: #218838;
+        }
+
+        .summary {
+            text-align: right;
+            font-size: 1.1em;
+        }
+
+        .summary .summary-item {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .summary .summary-item label,
+        .summary .summary-item p {
+            margin: 0 10px 0 0;
+        }
+
+        .summary .summary-item input[type="number"] {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: right;
+            font-size: 1em;
+        }
+
+        .summary .total {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #0056b3;
+            border-top: 2px solid #eee;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .qr-section {
+            text-align: center;
+        }
+
+        #qrCodeContainer img {
+            max-width: 150px;
+            height: auto;
+            border: 1px solid #ddd;
+            padding: 5px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .invoice-footer {
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+            border-top: 2px solid #eee;
+            padding-top: 20px;
+        }
+
+        .social-media a {
+            color: #0056b3;
+            margin: 0 10px;
+            font-size: 1.8em;
+            transition: color 0.3s ease;
+        }
+
+        .social-media a:hover {
+            color: #003d80;
+        }
+
+        .print-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 20px;
+        }
+
+        .print-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Estilos para impresión */
+        @media print {
+            body {
+                background-color: #fff;
+                margin: 0;
+                padding: 0;
+            }
+            .invoice-container {
+                box-shadow: none;
+                border-radius: 0;
+                margin: 0;
+                padding: 0;
+            }
+            .print-button, .product-entry button, .input-group input, .input-group label, #productTable .delete-row-btn {
+                display: none; /* Oculta botones y campos de entrada en la impresión */
+            }
+            .product-entry {
+                border-bottom: none; /* Elimina la línea extra debajo de los productos */
+                padding-bottom: 0;
+            }
+            .invoice-header, .customer-details, .summary, .qr-section, .invoice-footer {
+                padding-left: 20px;
+                padding-right: 20px;
+                border-bottom: none;
+            }
+            /* Asegurar que los inputs se vean como texto plano en la impresión */
+            input[type="text"], input[type="email"], input[type="number"] {
+                border: none !important;
+                padding: 0 !important;
+                background-color: transparent !important;
+            }
+            #productTable input {
+                border: none !important;
+                background-color: transparent !important;
+                padding: 0 !important;
+                width: auto !important; /* Permite que el contenido determine el ancho */
+            }
+        }
+        /* --- style.css end --- */
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <header class="invoice-header">
+            <img src="C:\Users\MINEDUCYT\Downloads\technofy\WhatsApp Image 2025-07-15 at 10.19.41 AM.jpeg" alt="Logo Tienda_Techonofy" class="logo">
+            <h1>Factura de Compra</h1>
+            <div class="company-info">
+                <p><strong>Tienda_Techonofy</strong></p>
+                <p>San Miguel, El Salvador</p>
+                <p>tiendatechonofy@gmail.com</p>
+                <p>+503 75521948</p>
+            </div>
+            <div class="invoice-meta">
+                <p><strong>Fecha:</strong> <span id="invoiceDate"></span></p>
+                <p><strong>Factura Nº:</strong> <span id="invoiceNumber"></span></p>
+            </div>
+        </header>
+
+        <section class="customer-details">
+            <h2>Detalles del Cliente</h2>
+            <div class="input-group">
+                <label for="customerName">Nombre:</label>
+                <input type="text" id="customerName" placeholder="Nombre del Cliente">
+            </div>
+            <div class="input-group">
+                <label for="customerAddress">Dirección:</label>
+                <input type="text" id="customerAddress" placeholder="Dirección del Cliente">
+            </div>
+            <div class="input-group">
+                <label for="customerEmail">Telefono:</label>
+                <input type="email" id="customerTelefono" placeholder="Telefono">
+            </div>
+        </section>
+
+        <section class="product-entry">
+            <h2>Productos Comprados</h2>
+            <table id="productTable">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+            <button id="addProductBtn">Añadir Producto</button>
+			 
+
+        </section>
+
+        <section class="summary">
+            <div class="summary-item">
+                <label for="shippingCost">Costo de Envío:</label>
+                <input type="number" id="shippingCost" min="0" value="0">
+            </div>
+            <div class="summary-item">
+                <p>Subtotal:</p>
+                <p>$<span id="subtotalAmount">0.00</span></p>
+            </div>
+            <div class="summary-item total">
+                <p><strong>Total:</strong></p>
+                <p><strong>$<span id="totalAmount">0.00</span></strong></p>
+            </div>
+        </section>
+
+        <section class="qr-section">
+            <h2>QR del Producto / Tienda_Techonofy</h2>
+            <div id="qrCodeContainer">
+                <img src="C:\Users\MINEDUCYT\Downloads\technofy\qrcode_web192.github.io.png" alt="QR Tienda_Techonofy" id="staticQrCode">
+                <p>Escanea para visitar nuestra tienda en línea.</p>
+            </div>
+        </section>
+
+        <footer class="invoice-footer">
+            <p>¡Gracias por tu compra en Tienda_Techonofy!</p>
+            <div class="social-media">
+                <a href="https://wa.me/50375521948" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.tiktok.com/@tiendatechonofy" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                <a href="https://www.youtube.com/@tiendatechonofy" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.facebook.com/tiendatechonofy" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://m.me/tiendatechonofy" target="_blank" title="Messenger"><i class="fab fa-facebook-messenger"></i></a>
+                <a href="https://www.instagram.com/tiendatechonofy" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+            </div>
+            <p>Síguenos en nuestras redes sociales.</p>
+            <button onclick="window.print()" class="print-button">Imprimir Factura</button>
+        </footer>
+    </div>
+
+    <script>
+        /* --- script.js start --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            const invoiceDate = document.getElementById('invoiceDate');
+            const invoiceNumber = document.getElementById('invoiceNumber');
+            const customerNameInput = document.getElementById('customerName');
+            const customerAddressInput = document.getElementById('customerAddress');
+            const customerEmailInput = document.getElementById('customerEmail');
+            const productTableBody = document.querySelector('#productTable tbody');
+            const addProductBtn = document.getElementById('addProductBtn');
+            const shippingCostInput = document.getElementById('shippingCost');
+            const subtotalAmountSpan = document.getElementById('subtotalAmount');
+            const totalAmountSpan = document.getElementById('totalAmount');
+
+            // Establecer fecha y número de factura inicial
+            invoiceDate.textContent = new Date().toLocaleDateString('es-SV');
+            invoiceNumber.textContent = generateInvoiceNumber(); // Función para generar número de factura
+
+            // Función para generar un número de factura simple (puedes mejorarla)
+            function generateInvoiceNumber() {
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+                const randomNum = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
+                return `TT-${year}${month}${day}-${randomNum}`;
+            }
+
+            // Array para almacenar los productos (no usado directamente en este ejemplo simple, pero útil para expansiones)
+            let products = [];
+
+            // Función para añadir una nueva fila de producto
+            function addProductRow(product = { name: '', quantity: 1, price: 0 }) {
+                const newRow = productTableBody.insertRow();
+                newRow.innerHTML = `
+                    <td><input type="text" value="${product.name}" class="product-name" placeholder="Nombre del producto"></td>
+                    <td><input type="number" value="${product.quantity}" min="1" class="product-quantity"></td>
+                    <td><input type="number" value="${product.price}" min="0" step="0.01" class="product-price"></td>
+                    <td>$<span class="product-subtotal">0.00</span></td>
+                    <td><button class="delete-row-btn">Eliminar</button></td>
+                `;
+
+                const nameInput = newRow.querySelector('.product-name');
+                const quantityInput = newRow.querySelector('.product-quantity');
+                const priceInput = newRow.querySelector('.product-price');
+                const subtotalSpan = newRow.querySelector('.product-subtotal');
+                const deleteBtn = newRow.querySelector('.delete-row-btn');
+
+                // Event listeners para actualizar al cambiar valores
+                nameInput.addEventListener('input', updateCalculations);
+                quantityInput.addEventListener('input', updateCalculations);
+                priceInput.addEventListener('input', updateCalculations);
+                shippingCostInput.addEventListener('input', updateCalculations);
+
+                // Event listener para eliminar fila
+                deleteBtn.addEventListener('click', () => {
+                    newRow.remove();
+                    updateCalculations();
+                });
+
+                // Añadir producto al array (opcional, para futuras funcionalidades)
+                products.push({
+                    nameInput: nameInput,
+                    quantityInput: quantityInput,
+                    priceInput: priceInput,
+                    subtotalSpan: subtotalSpan
+                });
+
+                updateCalculations();
+            }
+
+            // Función para calcular y actualizar todos los totales
+            function updateCalculations() {
+                let currentSubtotal = 0;
+
+                productTableBody.querySelectorAll('tr').forEach(row => {
+                    const quantityInput = row.querySelector('.product-quantity');
+                    const priceInput = row.querySelector('.product-price');
+                    const subtotalSpan = row.querySelector('.product-subtotal');
+
+                    const quantity = parseFloat(quantityInput.value) || 0;
+                    const price = parseFloat(priceInput.value) || 0;
+                    const productSubtotal = quantity * price;
+
+                    subtotalSpan.textContent = productSubtotal.toFixed(2);
+                    currentSubtotal += productSubtotal;
+                });
+
+                const shippingCost = parseFloat(shippingCostInput.value) || 0;
+                const total = currentSubtotal + shippingCost;
+
+                subtotalAmountSpan.textContent = currentSubtotal.toFixed(2);
+                totalAmountSpan.textContent = total.toFixed(2);
+            }
+
+            // Añadir la primera fila de producto al cargar
+            addProductRow();
+
+            // Event listener para el botón "Añadir Producto"
+            addProductBtn.addEventListener('click', () => addProductRow());
+
+            // Asegurar que los inputs del cliente también actualicen si fuera necesario (aunque no impactan los cálculos)
+            customerNameInput.addEventListener('input', () => {});
+            customerAddressInput.addEventListener('input', () => {});
+            customerEmailInput.addEventListener('input', () => {});
+        });
+        /* --- script.js end --- */
+    </script>
+</body>
+</html>
